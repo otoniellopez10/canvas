@@ -49,6 +49,11 @@ export const MenuComponent = () => {
         setOptionToEdit(null)
     }
 
+    const onDragStart = (event, option) => {
+        event.dataTransfer.setData('application/reactflow', JSON.stringify(option));
+        event.dataTransfer.effectAllowed = 'move';
+    };
+
     useEffect(() => {
         const ordenedDataPanel = dataPanel.sort((a, b) => a.title - b.title)
         setMenuOptions(ordenedDataPanel)
@@ -58,12 +63,15 @@ export const MenuComponent = () => {
         <Box sx={{
             p: 2,
             pb: 5,
-            width: '100%',
+            width: '375px',
             color: 'white',
-            height: '100%',
+            minHeight: '100%',
             borderRight: 1,
             borderColor: 'divider',
             background: 'linear-gradient(-60deg, #0061bf, #38b6f4)',
+            position: 'fixed',
+            top: 0,
+            left: 0,
         }}>
             <Typography
                 variant="h5"
@@ -84,7 +92,10 @@ export const MenuComponent = () => {
                         direction="row"
                         alignItems="center"
                         justifyContent='space-between'
-                        style={{ borderBottom: '1px solid rgb(255 255 255 / 0.30)' }}>
+                        style={{ borderBottom: '1px solid rgb(255 255 255 / 0.30)' }}
+                        draggable
+                        onDragStart={(event) => onDragStart(event, option)}
+                    >
                         <Stack direction="row" spacing={2} alignItems="center">
                             <Avatar
                                 sx={{
